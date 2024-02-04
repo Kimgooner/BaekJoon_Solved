@@ -1,6 +1,6 @@
 #include <iostream>
 
-int hash_val[55];
+long long hash_val[55];
 
 int N;
 std::string str;
@@ -13,8 +13,8 @@ int main(){
         hash_val[i] = (hash_val[i-1] * 31) % 1234567891;
     }
 
-    int sum = 0;
-    int val;
+    long long sum = 0;
+    long long val;
     for(int i = 0; i < str.size(); i++){
         val = hash_val[i] * (str[i] - 'a' + 1);
         sum += val;
