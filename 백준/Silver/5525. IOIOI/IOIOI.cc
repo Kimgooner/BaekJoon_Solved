@@ -5,24 +5,46 @@
 using namespace std;
 int N, M;
 string S;
-string prev_list = "IO";
+int cnt = 0;
+int fail[1000005];
+int result[1000005];
 
-bool find_str(int n, int idx, int prev){
-    if(n > (2*N)+1) return true;
-    if(idx >= M) return false;
-    if(prev_list[prev] != S[idx]) return find_str(n+1, idx+1, (prev+1)%2);
-    return false;
+char pattern(int i){
+    if(i%2 == 0) return 'I';
+    else return 'O';
 }
 
-int main(){
-    cin >> N >> M >> S;
-    int size = M;
-
-    int cnt = 0;
-    for(int i = 0; i < M; i++){
-        if(S[i] == 'I') {
-            if(find_str(2, i + 1, 0)) cnt++;
+void getFail(){
+    for(int i = 1,j = 0; i < (2*N)+1; i++){
+        while (j > 0 && pattern(i) != pattern(j)){
+            j = fail[j-1];
+        }
+        if(pattern(i) == pattern(j)){
+            fail[i] = ++j;
         }
     }
+}
+
+void KMP(){
+    for(int i = 0,j = 0; i < M; i++){
+        while (j > 0 && S[i] != pattern(j)){
+            j = fail[j-1];
+        }
+        if(S[i] == pattern(j)){
+            if(j == 2*N){
+                j = fail[j];
+                cnt++;
+            }
+            else{
+                j++;
+            }
+        }
+    }
+}
+
+int main() {
+    cin >> N >> M >> S;
+    getFail();
+    KMP();
     cout << cnt;
 }
